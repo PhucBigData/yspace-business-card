@@ -1,16 +1,22 @@
 import re
 
+def clean_b64(val):
+    val = val.strip()
+    if "," in val and val.startswith("data:image"):
+        return val.split(",", 1)[1]
+    return val
+
 with open("avatar_thu_b64.txt", "r") as f:
-    avatar_thu_b64 = f.read().strip()
+    avatar_thu_b64 = clean_b64(f.read())
 
 with open("avatar_3x4_b64.txt", "r") as f:
-    avatar_oliver_b64 = f.read().strip()
+    avatar_oliver_b64 = clean_b64(f.read())
 
 with open("qr_oliver_b64.txt", "r") as f:
-    qr_oliver_b64 = f.read().strip()
+    qr_oliver_b64 = clean_b64(f.read())
 
 with open("yspace_logo_b64.txt", "r") as f:
-    yspace_logo_b64 = f.read().strip()
+    yspace_logo_b64 = clean_b64(f.read())
 
 with open("export_back.html", "r", encoding="utf-8") as f:
     back_html_content = f.read()
