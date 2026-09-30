@@ -27,6 +27,14 @@ back_html_base = back_match.group(1) if back_match else ""
 front_oliver = front_html_base.replace("Nguyễn Ngọc Phúc", "Oliver Nguyen")
 front_phuc = front_html_base.replace("Oliver Nguyen", "Nguyễn Ngọc Phúc")
 
+# Thanh Thu variant
+front_thu = (front_html_base
+    .replace("Oliver Nguyen", "Nguyễn Thị Thanh Thư")
+    .replace("+84 947 282 357", "+84 369 693 240")
+    .replace("phuc.nn@yspace.vn", "thu.ntt@yspace.vn")
+    .replace("avatar_oliver.jpg", "avatar_thu.jpg")
+)
+
 # 2. Template for single isolated card
 def make_single_card_html(card_article_html, title="YSPACE Business Card"):
     return f"""<!DOCTYPE html>
@@ -193,11 +201,14 @@ def make_print_pdf_html(front_article, back_article):
 files_to_write = {
     "export_front_oliver.html": make_single_card_html(front_oliver, "YSPACE Card Front - Oliver Nguyen"),
     "export_front_phuc.html": make_single_card_html(front_phuc, "YSPACE Card Front - Nguyen Ngoc Phuc"),
+    "export_front_thu.html": make_single_card_html(front_thu, "YSPACE Card Front - Nguyen Thi Thanh Thu"),
     "export_back.html": make_single_card_html(back_html_base, "YSPACE Card Back"),
     "export_both_oliver.html": make_both_cards_html(front_oliver, back_html_base, "Oliver Nguyen"),
     "export_both_phuc.html": make_both_cards_html(front_phuc, back_html_base, "Nguyễn Ngọc Phúc"),
+    "export_both_thu.html": make_both_cards_html(front_thu, back_html_base, "Nguyễn Thị Thanh Thư"),
     "export_print_oliver.html": make_print_pdf_html(front_oliver, back_html_base),
-    "export_print_phuc.html": make_print_pdf_html(front_phuc, back_html_base)
+    "export_print_phuc.html": make_print_pdf_html(front_phuc, back_html_base),
+    "export_print_thu.html": make_print_pdf_html(front_thu, back_html_base)
 }
 
 for fname, content in files_to_write.items():
@@ -240,11 +251,15 @@ render_png("export_front_oliver.html", os.path.join(DOWNLOADS_DIR, "YSPACE_Card_
 front_phuc_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_Mat_Truoc_Nguyen_Ngoc_Phuc.png")
 render_png("export_front_phuc.html", front_phuc_png, scale=4, width=340, height=204)
 
-# 3. Back Side
+# 3. Front Nguyen Thi Thanh Thu
+front_thu_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_Mat_Truoc_Thanh_Thu.png")
+render_png("export_front_thu.html", front_thu_png, scale=4, width=340, height=204)
+
+# 4. Back Side
 back_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_Mat_Sau.png")
 render_png("export_back.html", back_png, scale=4, width=340, height=204)
 
-# 4. Both Cards Mockup (1920 x 950)
+# 5. Both Cards Mockup (1920 x 950)
 both_oliver_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_2Mat_Oliver_Nguyen.png")
 render_png("export_both_oliver.html", both_oliver_png, scale=2, width=1280, height=720)
 # Default copy
@@ -253,7 +268,10 @@ render_png("export_both_oliver.html", os.path.join(DOWNLOADS_DIR, "YSPACE_Card_2
 both_phuc_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_2Mat_Nguyen_Ngoc_Phuc.png")
 render_png("export_both_phuc.html", both_phuc_png, scale=2, width=1280, height=720)
 
-# 5. Print PDF (2 pages 90mm x 54mm)
+both_thu_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_2Mat_Thanh_Thu.png")
+render_png("export_both_thu.html", both_thu_png, scale=2, width=1280, height=720)
+
+# 6. Print PDF (2 pages 90mm x 54mm)
 pdf_oliver = os.path.join(DOWNLOADS_DIR, "YSPACE_Business_Card_Oliver_Nguyen_InAn_90x54mm.pdf")
 render_pdf("export_print_oliver.html", pdf_oliver)
 # Default copy
@@ -262,4 +280,8 @@ render_pdf("export_print_oliver.html", os.path.join(DOWNLOADS_DIR, "YSPACE_Busin
 pdf_phuc = os.path.join(DOWNLOADS_DIR, "YSPACE_Business_Card_Nguyen_Ngoc_Phuc_InAn_90x54mm.pdf")
 render_pdf("export_print_phuc.html", pdf_phuc)
 
+pdf_thu = os.path.join(DOWNLOADS_DIR, "YSPACE_Business_Card_Thanh_Thu_InAn_90x54mm.pdf")
+render_pdf("export_print_thu.html", pdf_thu)
+
 print("All business card assets exported successfully into ~/Downloads!")
+

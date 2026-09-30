@@ -25,54 +25,112 @@ with open("export_back.html", "r", encoding="utf-8") as f:
 back_match = re.search(r'(<article id="card-back-view"[\s\S]*?</article>)', back_html_content)
 back_article = back_match.group(1)
 
-with open("export_front_thu_vi.html", "r", encoding="utf-8") as f:
-    thu_front_content = f.read()
+# Refined, Spacious, Executive Front Card Article
+front_article = f"""<article id="card-front-view" class="business-card relative w-[90mm] h-[54mm] bg-[#080C16] text-white rounded-xl shadow-2xl overflow-hidden flex items-center p-3.5 select-none cyber-border print-page-break shrink-0">
+  
+  <!-- Họa tiết mạch chuyển đổi số & vi mạch dữ liệu -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute inset-0 bg-[radial-gradient(#E61B5F_0.8px,transparent_0.8px)] [background-size:5.5mm_5.5mm] opacity-15"></div>
+    <svg class="absolute inset-0 w-full h-full opacity-15" viewBox="0 0 340 200" fill="none" stroke="#E61B5F">
+      <path d="M0,35 L50,35 L80,65 L260,65 L290,35 L340,35" stroke-width="1.2" />
+      <path d="M0,165 L70,165 L100,135 L240,135 L270,165 L340,165" stroke-width="1.2" />
+      <circle cx="80" cy="65" r="3" fill="#E61B5F" />
+      <circle cx="260" cy="65" r="3" fill="#E61B5F" />
+    </svg>
+    <div class="absolute -top-10 -left-10 w-36 h-36 rounded-full bg-[#E61B5F]/20 blur-2xl"></div>
+  </div>
 
-# Extract front card article
-front_match = re.search(r'(<article id="card-front-view"[\s\S]*?</article>)', thu_front_content)
-front_article = front_match.group(1)
+  <!-- NỘI DUNG MẶT TRƯỚC (2 CỘT CÂN ĐỐI, THÔNG THOÁNG) -->
+  <div class="relative z-10 w-full h-full flex items-center gap-3.5">
+    
+    <!-- CỘT TRÁI: Ảnh chân dung 3:4 -->
+    <div class="shrink-0 flex flex-col items-center justify-center">
+      <div class="w-[25.5mm] h-[34mm] rounded-xl overflow-hidden p-[1.5px] bg-gradient-to-b from-[#E61B5F] via-[#FF2A75]/50 to-slate-800 shadow-xl shadow-[#E61B5F]/25 ring-1 ring-[#E61B5F]/40 relative group">
+        <img id="card-avatar" src="avatar_oliver.jpg" onerror="this.onerror=null; this.src='data:image/jpeg;base64,{avatar_oliver_b64}'" alt="Oliver Nguyen" class="w-full h-full object-cover rounded-[10px]" />
+        
+        <!-- Tag trạng thái PRO -->
+        <div class="absolute bottom-1 right-1 px-1 py-0.2 bg-black/80 backdrop-blur-xs rounded-full border border-[#E61B5F]/60 flex items-center gap-1 shadow-xs">
+          <span class="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-[5.2px] font-bold text-slate-200 uppercase tracking-tighter">PRO</span>
+        </div>
+      </div>
+    </div>
 
-# Ensure ID hooks and default to Oliver Nguyen with Lark QR
-# 1. Avatar img hook
-front_article = re.sub(
-    r'<img id="card-avatar"\s+src="data:image/jpeg;base64,[^"]+"\s+alt="[^"]*"\s+class="([^"]*)"\s*/>',
-    f'<img id="card-avatar" src="avatar_oliver.jpg" onerror="this.onerror=null; this.src=\'data:image/jpeg;base64,{avatar_oliver_b64}\'" alt="Oliver Nguyen" class="\\1" />',
-    front_article,
-    count=1
-)
+    <!-- CỘT PHẢI: Thông tin chuyên gia -->
+    <div class="flex-1 h-full flex flex-col justify-between py-0.5 min-w-0">
+      
+      <!-- Hàng 1: Brand Logo & Badge Lark Partner -->
+      <div class="flex items-center justify-between gap-1">
+        <div class="flex items-center gap-1.5">
+          <img src="data:image/png;base64,{yspace_logo_b64}" alt="YSPACE Logo" class="w-4 h-4 object-contain shrink-0 drop-shadow-[0_0_6px_rgba(230,27,95,0.6)]" />
+          <div class="flex flex-col">
+            <span class="text-[11.5px] font-black tracking-wider text-white uppercase leading-none">
+              YSPACE <span class="text-[#E61B5F]">SOLUTIONS</span>
+            </span>
+            <span class="w-7 h-[1.5px] bg-[#E61B5F] mt-0.5 rounded-full"></span>
+          </div>
+        </div>
+        <span class="text-[5.5px] font-extrabold px-1.5 py-0.5 rounded-full bg-[#E61B5F]/15 text-[#FF2A75] border border-[#E61B5F]/40 uppercase tracking-tight shrink-0">
+          Lark Partner
+        </span>
+      </div>
 
-# 2. Name hook
-front_article = re.sub(
-    r'<h2 id="display-name"[^>]*>[\s\S]*?</h2>',
-    '<h2 id="display-name" class="text-[13.5px] font-black tracking-tight text-white leading-none">Oliver Nguyen</h2>',
-    front_article
-)
+      <!-- Hàng 2: Tên & Chức danh (Khoảng cách thoáng, chữ nổi bật) -->
+      <div class="my-auto">
+        <h2 id="display-name" class="text-[14.5px] font-black tracking-tight text-white leading-tight">Oliver Nguyen</h2>
+        <div class="text-[7.2px] font-bold tracking-wider text-[#FF2A75] uppercase mt-0.5 leading-tight flex items-center gap-1">
+          <span>Digital Transformation Specialist</span>
+        </div>
+        <div class="text-[6.4px] font-medium text-slate-400 tracking-wide mt-0.5">
+          Company OS Solution Architect &bull; Lark Expert
+        </div>
+      </div>
 
-# 3. Phone hook
-front_article = re.sub(
-    r'<span id="display-phone"[^>]*>[\s\S]*?</span>',
-    '<span id="display-phone" class="font-medium truncate">+84 947 282 357 <span class="text-slate-500 text-[5.8px]">(Zalo/Phone)</span></span>',
-    front_article
-)
+      <!-- Hàng 3: Kênh kết nối số & Smart QR -->
+      <div class="pt-1.5 border-t border-slate-800/80 flex items-center justify-between gap-2">
+        
+        <!-- Danh bạ (Giãn dòng thoáng đãng, icon viền hồng tinh tế) -->
+        <div class="space-y-1.2 flex-1 min-w-0">
+          <!-- Mobile / Zalo -->
+          <div class="flex items-center gap-1.5 text-[6.8px] text-slate-300 leading-tight">
+            <div class="w-3 h-3 rounded-full bg-[#E61B5F]/20 text-[#FF2A75] border border-[#E61B5F]/40 flex items-center justify-center shrink-0">
+              <svg class="w-1.5 h-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            </div>
+            <span id="display-phone" class="font-medium truncate">+84 947 282 357 <span class="text-slate-500 text-[5.8px]">(Zalo/Phone)</span></span>
+          </div>
 
-# 4. Email hook
-front_article = re.sub(
-    r'<span id="display-email"[^>]*>[\s\S]*?</span>',
-    '<span id="display-email" class="font-medium truncate">phuc.nn@yspace.vn</span>',
-    front_article
-)
+          <!-- Email -->
+          <div class="flex items-center gap-1.5 text-[6.8px] text-slate-300 leading-tight">
+            <div class="w-3 h-3 rounded-full bg-[#E61B5F]/20 text-[#FF2A75] border border-[#E61B5F]/40 flex items-center justify-center shrink-0">
+              <svg class="w-1.5 h-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <span id="display-email" class="font-medium truncate">phuc.nn@yspace.vn</span>
+          </div>
 
-# 5. QR Code hook
-qr_replacement = f"""<div id="card-qr-box" class="w-[8mm] h-[8mm] bg-white rounded p-0.5 shadow-sm flex items-center justify-center relative overflow-hidden">
-                    <img src="qr_oliver.png" onerror="this.onerror=null; this.src='data:image/png;base64,{qr_oliver_b64}'" alt="Lark QR" class="w-full h-full object-contain rounded" />
-                  </div>
-                  <span id="card-qr-label" class="text-[4.8px] font-bold text-[#FF2A75] mt-0.5 tracking-tighter uppercase">Lark Contact</span>"""
+          <!-- Website & Location -->
+          <div class="flex items-center gap-1.5 text-[6.8px] text-slate-300 leading-tight">
+            <div class="w-3 h-3 rounded-full bg-[#E61B5F]/20 text-[#FF2A75] border border-[#E61B5F]/40 flex items-center justify-center shrink-0">
+              <svg class="w-1.5 h-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+            </div>
+            <span class="font-medium truncate">www.yspace.vn &bull; Da Nang Office</span>
+          </div>
+        </div>
 
-front_article = re.sub(
-    r'<div class="w-\[8mm\] h-\[8mm\] bg-white rounded p-0\.5 shadow-sm flex items-center justify-center relative\">[\s\S]*?</div>\s*<span class="text-\[4\.8px\] font-bold text-\[#FF2A75\] mt-0\.5 tracking-tighter uppercase\">Scan vCard</span>',
-    qr_replacement,
-    front_article
-)
+        <!-- Khung QR Code vCard / Lark Contact -->
+        <div class="shrink-0 flex flex-col items-center justify-center p-1 rounded-lg bg-white/5 border border-[#E61B5F]/30 backdrop-blur-xs">
+          <div id="card-qr-box" class="w-[8.5mm] h-[8.5mm] bg-white rounded p-0.5 shadow-sm flex items-center justify-center relative overflow-hidden">
+            <img src="qr_oliver.png" onerror="this.onerror=null; this.src='data:image/png;base64,{qr_oliver_b64}'" alt="Lark QR" class="w-full h-full object-contain rounded" />
+          </div>
+          <span id="card-qr-label" class="text-[4.8px] font-bold text-[#FF2A75] mt-0.5 tracking-tighter uppercase">Lark Contact</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</article>"""
 
 full_index_html = f"""<!DOCTYPE html>
 <html lang="vi">
@@ -168,8 +226,8 @@ full_index_html = f"""<!DOCTYPE html>
 
     /* Thu phóng màn hình */
     .zoom-100 {{ transform: scale(1); }}
-    .zoom-150 {{ transform: scale(1.5); }}
-    .zoom-200 {{ transform: scale(2); }}
+    .zoom-150 {{ transform: scale(1.35); }}
+    .zoom-200 {{ transform: scale(1.6); }}
 
     /* Hiệu ứng viền phát sáng thẻ công nghệ */
     .cyber-border {{
@@ -235,14 +293,14 @@ full_index_html = f"""<!DOCTYPE html>
         <div class="hidden md:flex items-center bg-slate-800/80 rounded-lg p-1 border border-slate-700/80 text-xs text-slate-300">
           <span class="px-2 text-slate-400 text-[11px] font-medium">Thu phóng:</span>
           <button onclick="setZoom('zoom-100')" id="btn-zoom-100" class="zoom-btn px-2.5 py-1 rounded font-medium hover:text-white transition">100%</button>
-          <button onclick="setZoom('zoom-150')" id="btn-zoom-150" class="zoom-btn px-2.5 py-1 rounded font-medium hover:text-white transition">150%</button>
-          <button onclick="setZoom('zoom-200')" id="btn-zoom-200" class="zoom-btn px-2.5 py-1 rounded font-medium hover:text-white transition bg-[#E61B5F] text-white font-bold">200%</button>
+          <button onclick="setZoom('zoom-150')" id="btn-zoom-150" class="zoom-btn px-2.5 py-1 rounded font-medium hover:text-white transition bg-[#E61B5F] text-white font-bold">150%</button>
+          <button onclick="setZoom('zoom-200')" id="btn-zoom-200" class="zoom-btn px-2.5 py-1 rounded font-medium hover:text-white transition">200%</button>
         </div>
 
         <!-- Print Button -->
         <button onclick="window.print()" class="bg-gradient-to-r from-[#E61B5F] via-[#FF2A75] to-[#E11D48] hover:opacity-95 text-white font-bold px-4 py-2 rounded-lg shadow-lg shadow-[#E61B5F]/35 transition duration-150 flex items-center gap-2 text-xs">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
           </svg>
           In Thẻ (Print)
         </button>
@@ -251,10 +309,10 @@ full_index_html = f"""<!DOCTYPE html>
     </div>
   </header>
 
-  <!-- VÙNG HIỂN THỊ THẺ -->
-  <main class="stage-wrapper flex-1 flex flex-col items-center justify-center p-8 sm:p-14 overflow-auto gap-12">
+  <!-- VÙNG HIỂN THỊ THẺ (KHOẢNG CÁCH RỘNG RÃI, KHÔNG DÍNH NHAU) -->
+  <main class="stage-wrapper flex-1 flex flex-col items-center justify-center p-8 sm:p-14 overflow-auto">
     
-    <div id="cardWrapper" class="scale-wrapper zoom-200 transition-transform duration-200 ease-out origin-center my-8 flex flex-col sm:flex-row items-center justify-center gap-8">
+    <div id="cardWrapper" class="scale-wrapper zoom-150 transition-transform duration-200 ease-out origin-center my-10 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20">
       {front_article}
       {back_article}
     </div>
@@ -382,4 +440,4 @@ full_index_html = f"""<!DOCTYPE html>
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(full_index_html)
 
-print("Generated clean and complete index.html with Lark QR code for Oliver Nguyen!")
+print("Generated clean, spacious, executive index.html!")
