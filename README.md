@@ -32,8 +32,9 @@
   * Xem Mặt Trước, Mặt Sau, hoặc Cả 2 Mặt song song.
   * Thu phóng chi tiết 100%, 150%, 200%.
   * Nút in thẻ trực tiếp (**Window Print**) chuẩn vector không viền thừa.
-* **Smart Contact & vCard:**
-  * Tích hợp mã QR vCard để đối tác quét và lưu liên hệ ngay vào điện thoại.
+* **Smart Contact & Lark QR:**
+  * Tích hợp mã QR Lark Contact chính thức cho Oliver Nguyen (Nguyễn Ngọc Phúc) giúp đối tác quét và kết nối ngay vào danh bạ Lark.
+  * Hỗ trợ mã QR vCard thông minh và danh thiếp số.
   * 5 huy hiệu năng lực số: **Lark Pro, Company OS, Automation, Base Data, Security**.
 
 ---

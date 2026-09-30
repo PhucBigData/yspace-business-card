@@ -6,6 +6,9 @@ with open("avatar_thu_b64.txt", "r") as f:
 with open("avatar_3x4_b64.txt", "r") as f:
     avatar_oliver_b64 = f.read().strip()
 
+with open("qr_oliver_b64.txt", "r") as f:
+    qr_oliver_b64 = f.read().strip()
+
 with open("yspace_logo_b64.txt", "r") as f:
     yspace_logo_b64 = f.read().strip()
 
@@ -16,18 +19,18 @@ with open("export_back.html", "r", encoding="utf-8") as f:
 back_match = re.search(r'(<article id="card-back-view"[\s\S]*?</article>)', back_html_content)
 back_article = back_match.group(1)
 
-with open("test_thu_card.html", "r", encoding="utf-8") as f:
+with open("export_front_thu_vi.html", "r", encoding="utf-8") as f:
     thu_front_content = f.read()
 
 # Extract front card article
 front_match = re.search(r'(<article id="card-front-view"[\s\S]*?</article>)', thu_front_content)
 front_article = front_match.group(1)
 
-# Ensure ID hooks in front_article
+# Ensure ID hooks and default to Oliver Nguyen with Lark QR
 # 1. Avatar img hook
 front_article = re.sub(
-    r'<img\s+src="data:image/jpeg;base64,[^"]+"\s+alt="[^"]*"\s+class="([^"]*)"\s*/>',
-    f'<img id="card-avatar" src="data:image/jpeg;base64,{avatar_thu_b64}" alt="Portrait" class="\\1" />',
+    r'<img id="card-avatar"\s+src="data:image/jpeg;base64,[^"]+"\s+alt="[^"]*"\s+class="([^"]*)"\s*/>',
+    f'<img id="card-avatar" src="data:image/jpeg;base64,{avatar_oliver_b64}" alt="Oliver Nguyen" class="\\1" />',
     front_article,
     count=1
 )
@@ -35,21 +38,33 @@ front_article = re.sub(
 # 2. Name hook
 front_article = re.sub(
     r'<h2 id="display-name"[^>]*>[\s\S]*?</h2>',
-    '<h2 id="display-name" class="text-[13.5px] font-black tracking-tight text-white leading-none">Nguyễn Thị Thanh Thư</h2>',
+    '<h2 id="display-name" class="text-[13.5px] font-black tracking-tight text-white leading-none">Oliver Nguyen</h2>',
     front_article
 )
 
 # 3. Phone hook
 front_article = re.sub(
-    r'<span class="font-medium truncate">\+84[^<]*<span class="text-slate-500 text-\[5\.8px\]">\(Zalo/Phone\)</span></span>',
-    '<span id="display-phone" class="font-medium truncate">+84 369 693 240 <span class="text-slate-500 text-[5.8px]">(Zalo/Phone)</span></span>',
+    r'<span id="display-phone"[^>]*>[\s\S]*?</span>',
+    '<span id="display-phone" class="font-medium truncate">+84 947 282 357 <span class="text-slate-500 text-[5.8px]">(Zalo/Phone)</span></span>',
     front_article
 )
 
 # 4. Email hook
 front_article = re.sub(
-    r'<span class="font-medium truncate">[^<]*@yspace\.vn</span>',
-    '<span id="display-email" class="font-medium truncate">thu.ntt@yspace.vn</span>',
+    r'<span id="display-email"[^>]*>[\s\S]*?</span>',
+    '<span id="display-email" class="font-medium truncate">phuc.nn@yspace.vn</span>',
+    front_article
+)
+
+# 5. QR Code hook
+qr_replacement = f"""<div id="card-qr-box" class="w-[8mm] h-[8mm] bg-white rounded p-0.5 shadow-sm flex items-center justify-center relative overflow-hidden">
+                    <img src="data:image/png;base64,{qr_oliver_b64}" alt="Lark QR" class="w-full h-full object-contain rounded" />
+                  </div>
+                  <span id="card-qr-label" class="text-[4.8px] font-bold text-[#FF2A75] mt-0.5 tracking-tighter uppercase">Lark Contact</span>"""
+
+front_article = re.sub(
+    r'<div class="w-\[8mm\] h-\[8mm\] bg-white rounded p-0\.5 shadow-sm flex items-center justify-center relative">[\s\S]*?</div>\s*<span class="text-\[4\.8px\] font-bold text-\[#FF2A75\] mt-0\.5 tracking-tighter uppercase">Scan vCard</span>',
+    qr_replacement,
     front_article
 )
 
@@ -189,15 +204,15 @@ full_index_html = f"""<!DOCTYPE html>
         <!-- Chọn nhân sự (Profile) -->
         <div class="flex items-center bg-slate-800/80 rounded-lg p-1 border border-slate-700/80 text-xs text-slate-300">
           <span class="px-2 text-slate-400 text-[11px] font-medium">Nhân sự:</span>
-          <button onclick="setProfile('thu')" id="btn-prof-thu" class="prof-btn px-2.5 py-1 rounded font-medium transition bg-[#E61B5F] text-white font-bold">Thanh Thư (Helimer)</button>
-          <button onclick="setProfile('oliver')" id="btn-prof-oliver" class="prof-btn px-2.5 py-1 rounded font-medium hover:text-white transition">Oliver Nguyen (Phúc)</button>
+          <button onclick="setProfile('oliver')" id="btn-prof-oliver" class="prof-btn px-2.5 py-1 rounded font-medium transition bg-[#E61B5F] text-white font-bold">Oliver Nguyen (Phúc)</button>
+          <button onclick="setProfile('thu')" id="btn-prof-thu" class="prof-btn px-2.5 py-1 rounded font-medium hover:text-white transition">Thanh Thư (Helimer)</button>
         </div>
 
         <!-- Chọn kiểu tên (VI / EN) -->
         <div class="flex items-center bg-slate-800/80 rounded-lg p-1 border border-slate-700/80 text-xs text-slate-300">
           <span class="px-2 text-slate-400 text-[11px] font-medium">Tên:</span>
-          <button onclick="setLang('vi')" id="btn-lang-vi" class="lang-btn px-2.5 py-1 rounded font-medium transition bg-[#E61B5F] text-white font-bold">Tiếng Việt</button>
-          <button onclick="setLang('en')" id="btn-lang-en" class="lang-btn px-2.5 py-1 rounded font-medium hover:text-white transition">English</button>
+          <button onclick="setLang('en')" id="btn-lang-en" class="lang-btn px-2.5 py-1 rounded font-medium transition bg-[#E61B5F] text-white font-bold">English</button>
+          <button onclick="setLang('vi')" id="btn-lang-vi" class="lang-btn px-2.5 py-1 rounded font-medium hover:text-white transition">Tiếng Việt</button>
         </div>
 
         <!-- Tab chuyển Mặt trước / Mặt sau -->
@@ -240,24 +255,28 @@ full_index_html = f"""<!DOCTYPE html>
   <!-- Script điều khiển Thu phóng, Chuyển Mặt thẻ, Đổi Profile & Đổi Tên -->
   <script>
     const profiles = {{
-      thu: {{
-        name_vi: 'Nguyễn Thị Thanh Thư',
-        name_en: 'Helimer Haluy',
-        phone: '+84 369 693 240',
-        email: 'thu.ntt@yspace.vn',
-        avatar: 'data:image/jpeg;base64,{avatar_thu_b64}'
-      }},
       oliver: {{
         name_vi: 'Nguyễn Ngọc Phúc',
         name_en: 'Oliver Nguyen',
         phone: '+84 947 282 357',
         email: 'phuc.nn@yspace.vn',
-        avatar: 'data:image/jpeg;base64,{avatar_oliver_b64}'
+        avatar: 'data:image/jpeg;base64,{avatar_oliver_b64}',
+        qr_inner: `<img src="data:image/png;base64,{qr_oliver_b64}" alt="Lark QR" class="w-full h-full object-contain rounded" />`,
+        qr_label: 'Lark Contact'
+      }},
+      thu: {{
+        name_vi: 'Nguyễn Thị Thanh Thư',
+        name_en: 'Helimer Haluy',
+        phone: '+84 369 693 240',
+        email: 'thu.ntt@yspace.vn',
+        avatar: 'data:image/jpeg;base64,{avatar_thu_b64}',
+        qr_inner: `<svg class="w-full h-full text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 0h4v4h-4v-4zm-4 4h4v4h-4v-4zm4-4h4v-4h-4v4zm-4-4h4v4h-4v-4z" /></svg><div class="absolute inset-0 m-auto w-2 h-2 rounded-[2px] bg-[#E61B5F] flex items-center justify-center text-white text-[4px] font-black">Y</div>`,
+        qr_label: 'Scan vCard'
       }}
     }};
 
-    let currentProfile = 'thu';
-    let currentLang = 'vi';
+    let currentProfile = 'oliver';
+    let currentLang = 'en';
 
     function updateCardDisplay() {{
       const p = profiles[currentProfile];
@@ -265,11 +284,15 @@ full_index_html = f"""<!DOCTYPE html>
       const phoneEl = document.getElementById('display-phone');
       const emailEl = document.getElementById('display-email');
       const avatarEl = document.getElementById('card-avatar');
+      const qrBox = document.getElementById('card-qr-box');
+      const qrLabel = document.getElementById('card-qr-label');
 
       if (nameEl) nameEl.innerText = currentLang === 'vi' ? p.name_vi : p.name_en;
       if (phoneEl) phoneEl.innerHTML = `${{p.phone}} <span class="text-slate-500 text-[5.8px]">(Zalo/Phone)</span>`;
       if (emailEl) emailEl.innerText = p.email;
       if (avatarEl) avatarEl.src = p.avatar;
+      if (qrBox && p.qr_inner) qrBox.innerHTML = p.qr_inner;
+      if (qrLabel && p.qr_label) qrLabel.innerText = p.qr_label;
     }}
 
     function setProfile(profKey) {{
@@ -342,4 +365,4 @@ full_index_html = f"""<!DOCTYPE html>
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(full_index_html)
 
-print("Generated clean and complete index.html!")
+print("Generated clean and complete index.html with Lark QR code for Oliver Nguyen!")
