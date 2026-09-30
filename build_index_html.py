@@ -36,7 +36,7 @@ front_article = front_match.group(1)
 # 1. Avatar img hook
 front_article = re.sub(
     r'<img id="card-avatar"\s+src="data:image/jpeg;base64,[^"]+"\s+alt="[^"]*"\s+class="([^"]*)"\s*/>',
-    f'<img id="card-avatar" src="data:image/jpeg;base64,{avatar_oliver_b64}" alt="Oliver Nguyen" class="\\1" />',
+    f'<img id="card-avatar" src="avatar_oliver.jpg" onerror="this.onerror=null; this.src=\'data:image/jpeg;base64,{avatar_oliver_b64}\'" alt="Oliver Nguyen" class="\\1" />',
     front_article,
     count=1
 )
@@ -64,12 +64,12 @@ front_article = re.sub(
 
 # 5. QR Code hook
 qr_replacement = f"""<div id="card-qr-box" class="w-[8mm] h-[8mm] bg-white rounded p-0.5 shadow-sm flex items-center justify-center relative overflow-hidden">
-                    <img src="data:image/png;base64,{qr_oliver_b64}" alt="Lark QR" class="w-full h-full object-contain rounded" />
+                    <img src="qr_oliver.png" onerror="this.onerror=null; this.src='data:image/png;base64,{qr_oliver_b64}'" alt="Lark QR" class="w-full h-full object-contain rounded" />
                   </div>
                   <span id="card-qr-label" class="text-[4.8px] font-bold text-[#FF2A75] mt-0.5 tracking-tighter uppercase">Lark Contact</span>"""
 
 front_article = re.sub(
-    r'<div class="w-\[8mm\] h-\[8mm\] bg-white rounded p-0\.5 shadow-sm flex items-center justify-center relative">[\s\S]*?</div>\s*<span class="text-\[4\.8px\] font-bold text-\[#FF2A75\] mt-0\.5 tracking-tighter uppercase">Scan vCard</span>',
+    r'<div class="w-\[8mm\] h-\[8mm\] bg-white rounded p-0\.5 shadow-sm flex items-center justify-center relative\">[\s\S]*?</div>\s*<span class="text-\[4\.8px\] font-bold text-\[#FF2A75\] mt-0\.5 tracking-tighter uppercase\">Scan vCard</span>',
     qr_replacement,
     front_article
 )
@@ -79,6 +79,9 @@ full_index_html = f"""<!DOCTYPE html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Digital Transformation Specialist Business Card - YSPACE</title>
   
   <!-- Tailwind CSS CDN -->
@@ -266,8 +269,9 @@ full_index_html = f"""<!DOCTYPE html>
         name_en: 'Oliver Nguyen',
         phone: '+84 947 282 357',
         email: 'phuc.nn@yspace.vn',
-        avatar: 'data:image/jpeg;base64,{avatar_oliver_b64}',
-        qr_inner: `<img src="data:image/png;base64,{qr_oliver_b64}" alt="Lark QR" class="w-full h-full object-contain rounded" />`,
+        avatar: 'avatar_oliver.jpg',
+        avatar_fallback: 'data:image/jpeg;base64,{avatar_oliver_b64}',
+        qr_inner: `<img src="qr_oliver.png" onerror="this.onerror=null; this.src='data:image/png;base64,{qr_oliver_b64}'" alt="Lark QR" class="w-full h-full object-contain rounded" />`,
         qr_label: 'Lark Contact'
       }},
       thu: {{
@@ -275,7 +279,8 @@ full_index_html = f"""<!DOCTYPE html>
         name_en: 'Helimer Haluy',
         phone: '+84 369 693 240',
         email: 'thu.ntt@yspace.vn',
-        avatar: 'data:image/jpeg;base64,{avatar_thu_b64}',
+        avatar: 'avatar_thu.jpg',
+        avatar_fallback: 'data:image/jpeg;base64,{avatar_thu_b64}',
         qr_inner: `<svg class="w-full h-full text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 0h4v4h-4v-4zm-4 4h4v4h-4v-4zm4-4h4v-4h-4v4zm-4-4h4v4h-4v-4z" /></svg><div class="absolute inset-0 m-auto w-2 h-2 rounded-[2px] bg-[#E61B5F] flex items-center justify-center text-white text-[4px] font-black">Y</div>`,
         qr_label: 'Scan vCard'
       }}
@@ -296,7 +301,13 @@ full_index_html = f"""<!DOCTYPE html>
       if (nameEl) nameEl.innerText = currentLang === 'vi' ? p.name_vi : p.name_en;
       if (phoneEl) phoneEl.innerHTML = `${{p.phone}} <span class="text-slate-500 text-[5.8px]">(Zalo/Phone)</span>`;
       if (emailEl) emailEl.innerText = p.email;
-      if (avatarEl) avatarEl.src = p.avatar;
+      if (avatarEl) {{
+        avatarEl.src = p.avatar;
+        avatarEl.onerror = function() {{
+          this.onerror = null;
+          this.src = p.avatar_fallback;
+        }};
+      }}
       if (qrBox && p.qr_inner) qrBox.innerHTML = p.qr_inner;
       if (qrLabel && p.qr_label) qrLabel.innerText = p.qr_label;
     }}
