@@ -33,7 +33,22 @@ front_thu = (front_html_base
     .replace("+84 947 282 357", "+84 369 693 240")
     .replace("phuc.nn@yspace.vn", "thu.ntt@yspace.vn")
     .replace("avatar_oliver.jpg", "avatar_thu.jpg")
+    .replace("qr_oliver.png", "qr_thu.png")
 )
+
+if os.path.exists(os.path.join(SCRATCH_DIR, "avatar_3x4_b64.txt")) and os.path.exists(os.path.join(SCRATCH_DIR, "avatar_thu_b64.txt")):
+    with open(os.path.join(SCRATCH_DIR, "avatar_3x4_b64.txt")) as f1, open(os.path.join(SCRATCH_DIR, "avatar_thu_b64.txt")) as f2:
+        b64_oliver = f1.read().strip()
+        b64_thu = f2.read().strip()
+        front_thu = front_thu.replace(b64_oliver, b64_thu)
+
+if os.path.exists(os.path.join(SCRATCH_DIR, "qr_oliver_b64.txt")) and os.path.exists(os.path.join(SCRATCH_DIR, "qr_thu_b64.txt")):
+    with open(os.path.join(SCRATCH_DIR, "qr_oliver_b64.txt")) as f1, open(os.path.join(SCRATCH_DIR, "qr_thu_b64.txt")) as f2:
+        b64_qr_oliver = f1.read().strip()
+        b64_qr_thu = f2.read().strip()
+        front_thu = front_thu.replace(b64_qr_oliver, b64_qr_thu)
+
+front_helimer = front_thu.replace("Nguyễn Thị Thanh Thư", "Helimer Haluy")
 
 # 2. Template for single isolated card
 def make_single_card_html(card_article_html, title="YSPACE Business Card"):
@@ -90,7 +105,7 @@ def make_both_cards_html(front_article, back_article, emp_name="Oliver Nguyen"):
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 40px;
+    gap: 130px;
   }}
   .card-box {{
     display: flex;
@@ -202,13 +217,16 @@ files_to_write = {
     "export_front_oliver.html": make_single_card_html(front_oliver, "YSPACE Card Front - Oliver Nguyen"),
     "export_front_phuc.html": make_single_card_html(front_phuc, "YSPACE Card Front - Nguyen Ngoc Phuc"),
     "export_front_thu.html": make_single_card_html(front_thu, "YSPACE Card Front - Nguyen Thi Thanh Thu"),
+    "export_front_thu_en.html": make_single_card_html(front_helimer, "YSPACE Card Front - Helimer Haluy"),
     "export_back.html": make_single_card_html(back_html_base, "YSPACE Card Back"),
     "export_both_oliver.html": make_both_cards_html(front_oliver, back_html_base, "Oliver Nguyen"),
     "export_both_phuc.html": make_both_cards_html(front_phuc, back_html_base, "Nguyễn Ngọc Phúc"),
     "export_both_thu.html": make_both_cards_html(front_thu, back_html_base, "Nguyễn Thị Thanh Thư"),
+    "export_both_thu_en.html": make_both_cards_html(front_helimer, back_html_base, "Helimer Haluy"),
     "export_print_oliver.html": make_print_pdf_html(front_oliver, back_html_base),
     "export_print_phuc.html": make_print_pdf_html(front_phuc, back_html_base),
-    "export_print_thu.html": make_print_pdf_html(front_thu, back_html_base)
+    "export_print_thu.html": make_print_pdf_html(front_thu, back_html_base),
+    "export_print_thu_en.html": make_print_pdf_html(front_helimer, back_html_base)
 }
 
 for fname, content in files_to_write.items():
@@ -221,8 +239,10 @@ def render_png(html_name, output_png, scale=4, width=340, height=204):
     html_path = os.path.join(SCRATCH_DIR, html_name)
     cmd = [
         CHROME_PATH,
-        "--headless",
+        "--headless=new",
         "--disable-gpu",
+        "--no-first-run",
+        "--no-default-browser-check",
         f"--force-device-scale-factor={scale}",
         f"--window-size={width},{height}",
         f"--screenshot={output_png}",
@@ -234,8 +254,10 @@ def render_pdf(html_name, output_pdf):
     html_path = os.path.join(SCRATCH_DIR, html_name)
     cmd = [
         CHROME_PATH,
-        "--headless",
+        "--headless=new",
         "--disable-gpu",
+        "--no-first-run",
+        "--no-default-browser-check",
         f"--print-to-pdf={output_pdf}",
         html_path
     ]
@@ -251,25 +273,30 @@ render_png("export_front_oliver.html", os.path.join(DOWNLOADS_DIR, "YSPACE_Card_
 front_phuc_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_Mat_Truoc_Nguyen_Ngoc_Phuc.png")
 render_png("export_front_phuc.html", front_phuc_png, scale=4, width=340, height=204)
 
-# 3. Front Nguyen Thi Thanh Thu
+# 3. Front Nguyen Thi Thanh Thu & Helimer Haluy
 front_thu_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_Mat_Truoc_Thanh_Thu.png")
 render_png("export_front_thu.html", front_thu_png, scale=4, width=340, height=204)
+front_helimer_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_Mat_Truoc_Helimer_Haluy.png")
+render_png("export_front_thu_en.html", front_helimer_png, scale=4, width=340, height=204)
 
 # 4. Back Side
 back_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_Mat_Sau.png")
 render_png("export_back.html", back_png, scale=4, width=340, height=204)
 
-# 5. Both Cards Mockup (1920 x 950)
+# 5. Both Cards Mockup (1440 x 820)
 both_oliver_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_2Mat_Oliver_Nguyen.png")
-render_png("export_both_oliver.html", both_oliver_png, scale=2, width=1280, height=720)
+render_png("export_both_oliver.html", both_oliver_png, scale=2, width=1440, height=820)
 # Default copy
-render_png("export_both_oliver.html", os.path.join(DOWNLOADS_DIR, "YSPACE_Card_2Mat.png"), scale=2, width=1280, height=720)
+render_png("export_both_oliver.html", os.path.join(DOWNLOADS_DIR, "YSPACE_Card_2Mat.png"), scale=2, width=1440, height=820)
 
 both_phuc_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_2Mat_Nguyen_Ngoc_Phuc.png")
-render_png("export_both_phuc.html", both_phuc_png, scale=2, width=1280, height=720)
+render_png("export_both_phuc.html", both_phuc_png, scale=2, width=1440, height=820)
 
 both_thu_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_2Mat_Thanh_Thu.png")
-render_png("export_both_thu.html", both_thu_png, scale=2, width=1280, height=720)
+render_png("export_both_thu.html", both_thu_png, scale=2, width=1440, height=820)
+
+both_helimer_png = os.path.join(DOWNLOADS_DIR, "YSPACE_Card_2Mat_Helimer_Haluy.png")
+render_png("export_both_thu_en.html", both_helimer_png, scale=2, width=1440, height=820)
 
 # 6. Print PDF (2 pages 90mm x 54mm)
 pdf_oliver = os.path.join(DOWNLOADS_DIR, "YSPACE_Business_Card_Oliver_Nguyen_InAn_90x54mm.pdf")
@@ -282,6 +309,9 @@ render_pdf("export_print_phuc.html", pdf_phuc)
 
 pdf_thu = os.path.join(DOWNLOADS_DIR, "YSPACE_Business_Card_Thanh_Thu_InAn_90x54mm.pdf")
 render_pdf("export_print_thu.html", pdf_thu)
+
+pdf_helimer = os.path.join(DOWNLOADS_DIR, "YSPACE_Business_Card_Helimer_Haluy_InAn_90x54mm.pdf")
+render_pdf("export_print_thu_en.html", pdf_helimer)
 
 print("All business card assets exported successfully into ~/Downloads!")
 

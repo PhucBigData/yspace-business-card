@@ -15,17 +15,16 @@ with open("avatar_3x4_b64.txt", "r") as f:
 with open("qr_oliver_b64.txt", "r") as f:
     qr_oliver_b64 = clean_b64(f.read())
 
-with open("yspace_logo_b64.txt", "r") as f:
+with open("qr_thu_b64.txt", "r") as f:
+    qr_thu_b64 = clean_b64(f.read())
+
+with open("logo_yspace_b64.txt", "r") as f:
     yspace_logo_b64 = clean_b64(f.read())
 
-with open("export_back.html", "r", encoding="utf-8") as f:
-    back_html_content = f.read()
+with open("logo_lark_b64.txt", "r") as f:
+    lark_logo_b64 = clean_b64(f.read())
 
-# Extract back card article
-back_match = re.search(r'(<article id="card-back-view"[\s\S]*?</article>)', back_html_content)
-back_article = back_match.group(1)
-
-# Refined, Spacious, Executive Front Card Article
+# FRONT CARD ARTICLE
 front_article = f"""<article id="card-front-view" class="business-card relative w-[90mm] h-[54mm] bg-[#080C16] text-white rounded-xl shadow-2xl overflow-hidden flex items-center p-3.5 select-none cyber-border print-page-break shrink-0">
   
   <!-- Họa tiết mạch chuyển đổi số & vi mạch dữ liệu -->
@@ -62,17 +61,14 @@ front_article = f"""<article id="card-front-view" class="business-card relative 
       <!-- Hàng 1: Brand Logo & Badge Lark Partner -->
       <div class="flex items-center justify-between gap-1">
         <div class="flex items-center gap-1.5">
-          <img src="data:image/png;base64,{yspace_logo_b64}" alt="YSPACE Logo" class="w-4 h-4 object-contain shrink-0 drop-shadow-[0_0_6px_rgba(230,27,95,0.6)]" />
-          <div class="flex flex-col">
-            <span class="text-[11.5px] font-black tracking-wider text-white uppercase leading-none">
-              YSPACE <span class="text-[#E61B5F]">SOLUTIONS</span>
-            </span>
-            <span class="w-7 h-[1.5px] bg-[#E61B5F] mt-0.5 rounded-full"></span>
-          </div>
+          <img src="logo_yspace.png" onerror="this.onerror=null; this.src='data:image/png;base64,{yspace_logo_b64}'" alt="YSPACE" class="h-3.5 object-contain shrink-0 drop-shadow-[0_0_6px_rgba(230,27,95,0.4)]" />
+          <span class="text-[6px] font-extrabold tracking-wider text-[#FF2A75] uppercase px-1 py-0.5 rounded bg-[#E61B5F]/15 border border-[#E61B5F]/30 leading-none">SOLUTIONS</span>
         </div>
-        <span class="text-[5.5px] font-extrabold px-1.5 py-0.5 rounded-full bg-[#E61B5F]/15 text-[#FF2A75] border border-[#E61B5F]/40 uppercase tracking-tight shrink-0">
-          Lark Partner
-        </span>
+        <div class="flex items-center gap-1.5 px-2 py-0.8 rounded-full bg-slate-900/90 border border-slate-700/70 shadow-sm shrink-0">
+          <img src="logo_lark_bird.png" onerror="this.onerror=null; this.src='data:image/png;base64,{lark_logo_b64}'" alt="Lark" class="w-3.5 h-3.5 object-contain shrink-0" />
+          <span class="text-[7.5px] font-black text-white tracking-tight leading-none">Lark</span>
+          <span class="text-[5.5px] font-extrabold px-1.5 py-0.2 rounded-full bg-[#3370FF]/25 text-[#4E88FF] border border-[#3370FF]/50 uppercase tracking-tight leading-none">Partner</span>
+        </div>
       </div>
 
       <!-- Hàng 2: Tên & Chức danh (Khoảng cách thoáng, chữ nổi bật) -->
@@ -129,6 +125,96 @@ front_article = f"""<article id="card-front-view" class="business-card relative 
     </div>
 
   </div>
+
+</article>"""
+
+# BACK CARD ARTICLE
+back_article = f"""<article id="card-back-view" class="business-card relative w-[90mm] h-[54mm] bg-[#080C16] text-white rounded-xl shadow-2xl overflow-hidden flex flex-col justify-between select-none cyber-border print-page-break shrink-0">
+  
+  <!-- Họa tiết mạch chuyển đổi số & vi mạch dữ liệu -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute inset-0 bg-[radial-gradient(#E61B5F_0.8px,transparent_0.8px)] [background-size:5.5mm_5.5mm] opacity-15"></div>
+    <svg class="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 340 200" fill="none" stroke="#E61B5F">
+      <path d="M0,35 L50,35 L80,65 L260,65 L290,35 L340,35" stroke-width="1.2" />
+      <path d="M0,165 L70,165 L100,135 L240,135 L270,165 L340,165" stroke-width="1.2" />
+      <circle cx="80" cy="65" r="3" fill="#E61B5F" />
+      <circle cx="260" cy="65" r="3" fill="#E61B5F" />
+      <circle cx="100" cy="135" r="3" fill="#FF2A75" />
+      <circle cx="240" cy="135" r="3" fill="#FF2A75" />
+    </svg>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-[#E61B5F]/15 blur-2xl"></div>
+  </div>
+
+  <!-- Nội dung chính Mặt sau: Tuyên ngôn & Năng lực Tư vấn CĐS -->
+  <div class="relative z-10 flex-1 px-5 pt-3 pb-2 flex flex-col justify-between items-center text-center">
+    
+    <!-- Logo lớn & Định vị thương hiệu -->
+    <div>
+      <div class="flex flex-col items-center justify-center mb-0.5">
+        <img src="logo_yspace.png" onerror="this.onerror=null; this.src='data:image/png;base64,{yspace_logo_b64}'" alt="YSPACE" class="h-5 object-contain drop-shadow-[0_0_12px_rgba(230,27,95,0.5)]" />
+        <div class="w-14 h-[1.5px] bg-gradient-to-r from-transparent via-[#E61B5F] to-transparent mt-1 rounded-full"></div>
+      </div>
+      <p class="text-[6.8px] font-bold tracking-widest text-[#FF2A75] uppercase mt-0.5">
+        ARCHITECTING YOUR ENTERPRISE OPERATING SYSTEM
+      </p>
+    </div>
+
+    <!-- 4 Khối Giải Pháp Chuyển Đổi Số Doanh Nghiệp -->
+    <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-left w-full max-w-[78mm] my-auto py-1.5 px-3 rounded-lg bg-slate-900/60 border border-[#E61B5F]/30 backdrop-blur-xs shadow-inner">
+      <div class="flex items-center gap-1.5">
+        <img src="logo_lark_bird.png" onerror="this.onerror=null; this.src='data:image/png;base64,{lark_logo_b64}'" alt="Lark" class="w-3.5 h-3.5 object-contain shrink-0" />
+        <div>
+          <div class="text-[6.6px] font-bold text-slate-100">Lark Pro Deployment</div>
+          <div class="text-[5.4px] text-slate-400">Tối ưu không gian làm việc số all-in-one</div>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-1.5">
+        <div class="w-3.5 h-3.5 rounded-full bg-[#E61B5F]/20 border border-[#E61B5F]/40 flex items-center justify-center shrink-0">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#E61B5F]"></span>
+        </div>
+        <div>
+          <div class="text-[6.6px] font-bold text-slate-100">Company OS Design</div>
+          <div class="text-[5.4px] text-slate-400">Kiến trúc vận hành liên phòng ban</div>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-1.5">
+        <div class="w-3.5 h-3.5 rounded-full bg-[#FF2A75]/20 border border-[#FF2A75]/40 flex items-center justify-center shrink-0">
+          <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+        </div>
+        <div>
+          <div class="text-[6.6px] font-bold text-slate-100">BPM & Automation</div>
+          <div class="text-[5.4px] text-slate-400">Tự động hóa luồng quy trình & phê duyệt</div>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-1.5">
+        <img src="logo_lark_bird.png" onerror="this.onerror=null; this.src='data:image/png;base64,{lark_logo_b64}'" alt="Lark" class="w-3.5 h-3.5 object-contain shrink-0" />
+        <div>
+          <div class="text-[6.6px] font-bold text-slate-100">Lark Base & AnyCross</div>
+          <div class="text-[5.4px] text-slate-400">Cơ sở dữ liệu quan hệ & Tích hợp API</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Footer Bar Mặt sau: Hotline & Kênh Tư Vấn -->
+    <div class="flex items-center justify-between w-full max-w-[78mm] pt-1 border-t border-slate-800 text-[6.5px]">
+      <div class="flex items-center gap-1.5 text-slate-300">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        <span>Hotline Chuyển đổi số: <strong class="text-white font-bold">0973 000 002</strong></span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-[#FF2A75] font-extrabold tracking-wider">www.yspace.vn</span>
+        <span class="text-slate-500">&bull;</span>
+        <span class="text-slate-400">Da Nang Office</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Đường chỉ viền đáy thẻ mặt sau -->
+  <div class="h-[2px] w-full bg-gradient-to-r from-transparent via-[#E61B5F] to-transparent z-20"></div>
 
 </article>"""
 
@@ -255,7 +341,7 @@ full_index_html = f"""<!DOCTYPE html>
       
       <!-- Brand Logo YSPACE -->
       <div class="flex items-center gap-3">
-        <img src="data:image/png;base64,{yspace_logo_b64}" alt="YSPACE Logo" class="w-8 h-8 object-contain drop-shadow-[0_0_10px_rgba(230,27,95,0.5)]" />
+        <img src="logo_yspace.png" onerror="this.onerror=null; this.src='data:image/png;base64,{yspace_logo_b64}'" alt="YSPACE" class="h-7 object-contain drop-shadow-[0_0_10px_rgba(230,27,95,0.5)]" />
         <div>
           <h1 class="text-sm font-bold text-white tracking-tight flex items-center gap-2">
             Digital Transformation Specialist Card
@@ -339,8 +425,8 @@ full_index_html = f"""<!DOCTYPE html>
         email: 'thu.ntt@yspace.vn',
         avatar: 'avatar_thu.jpg',
         avatar_fallback: 'data:image/jpeg;base64,{avatar_thu_b64}',
-        qr_inner: `<svg class="w-full h-full text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 0h4v4h-4v-4zm-4 4h4v4h-4v-4zm4-4h4v-4h-4v4zm-4-4h4v4h-4v-4z" /></svg><div class="absolute inset-0 m-auto w-2 h-2 rounded-[2px] bg-[#E61B5F] flex items-center justify-center text-white text-[4px] font-black">Y</div>`,
-        qr_label: 'Scan vCard'
+        qr_inner: `<img src="qr_thu.png" onerror="this.onerror=null; this.src='data:image/png;base64,{qr_thu_b64}'" alt="Lark QR" class="w-full h-full object-contain rounded" />`,
+        qr_label: 'Lark Contact'
       }}
     }};
 
@@ -440,4 +526,51 @@ full_index_html = f"""<!DOCTYPE html>
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(full_index_html)
 
-print("Generated clean, spacious, executive index.html!")
+# Also update export_back.html with stand-alone back card
+export_back_html = f"""<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>YSPACE Business Card Back</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * {{ box-sizing: border-box; -webkit-font-smoothing: antialiased; }}
+    body {{ font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }}
+    @page {{ size: 90mm 54mm; margin: 0; }}
+    html, body {{
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 90mm !important;
+      height: 54mm !important;
+      overflow: hidden !important;
+      background: #080C16 !important;
+    }}
+    .business-card {{
+      width: 90mm !important;
+      height: 54mm !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      border: none !important;
+    }}
+    .cyber-border {{ position: relative; }}
+    .cyber-border::after {{
+      content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+      background: linear-gradient(135deg, rgba(230,27,95,0.7) 0%, rgba(255,42,117,0.2) 40%, rgba(30,41,59,0.3) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+    }}
+  </style>
+</head>
+<body class="bg-[#080C16]">
+{back_article}
+</body>
+</html>"""
+
+with open("export_back.html", "w", encoding="utf-8") as f:
+    f.write(export_back_html)
+
+print("Generated clean, spacious, executive index.html and export_back.html!")

@@ -1,3 +1,12 @@
 .DS_Store
 *.pyc
 __pycache__/
+test_*
+lark_board*
+lark_icon_*
+lark_logo_*
+yspace_logo_*
+logo_yspace_icon.png
+logo_yspace_transparent.png
+logo_yspace_white_text.png
+logo_lark_sign_pill.png
